@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Manager</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Login Section (Initially Visible) -->
+    <div id="login-section" class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+            <div class="text-center mb-4">
+                <img src="assets/logo.png" alt="Logo App" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px;">
+                <h3>Football Manager</h3>
+            </div>
+            <form id="login-form">
+                <div class="mb-3">
+                    <label for="email" class="form-label"><i class="fas fa-envelope me-2"></i>Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-sign-in-alt me-2"></i>Log In</button>
+                <p class="mt-3 text-center">Don't have an account? <a href="#" id="show-register-link">Register</a></p>
+                <p id="login-error" class="text-danger mt-2"></p>
+            </form>
+            <form id="register-form" class="d-none">
+                <div class="mb-3">
+                    <label for="reg-email" class="form-label"><i class="fas fa-envelope me-2"></i>Email</label>
+                    <input type="email" class="form-control" id="reg-email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="reg-password" class="form-label"><i class="fas fa-lock me-2"></i>Password</label>
+                    <input type="password" class="form-control" id="reg-password" required>
+                </div>
+                 <div class="mb-3">
+                    <label for="reg-role" class="form-label"><i class="fas fa-user-shield me-2"></i>Role (admin/user)</label>
+                    <input type="text" class="form-control" id="reg-role" placeholder="Admin or User" value="user" required>
+                    <small>For testing, you can select "admin".</small>
+                </div>
+                <button type="submit" class="btn btn-success w-100"><i class="fas fa-user-plus me-2"></i>Register</button>
+                <p class="mt-3 text-center">Already have an account? <a href="#" id="show-login-link">Log In</a></p>
+                <p id="register-error" class="text-danger mt-2"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Section (Initially Hidden) -->
+    <div id="app-section" class="d-none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><i class="fas fa-futbol me-2"></i>Football Manager</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <span class="navbar-text me-3" id="user-greeting">Hello, User</span>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-light" id="logout-button"><i class="fas fa-sign-out-alt me-2"></i>Log Out</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="d-flex" style="padding-top: 56px;"> <!-- Adjust for fixed navbar -->
+            <aside id="sidebar" class="bg-light border-end p-3">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item admin-only">
+                        <a href="#" class="nav-link" data-section="tournaments"><i class="fas fa-trophy me-2"></i>Leagues</a>
+                    </li>
+                    <li class="nav-item admin-only">
+                        <a href="#" class="nav-link" data-section="teams"><i class="fas fa-users me-2"></i>Teams</a>
+                    </li>
+                    <li class="nav-item admin-only">
+                        <a href="#" class="nav-link" data-section="players"><i class="fas fa-user-friends me-2"></i>Players</a>
+                    </li>
+                     <li class="nav-item admin-only">
+                        <a href="#" class="nav-link" data-section="matches"><i class="fas fa-calendar-alt me-2"></i>Matches</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="leaderboards"><i class="fas fa-list-ol me-2"></i>Standings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="stats"><i class="fas fa-chart-bar me-2"></i>Statistics</a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main id="main-content" class="flex-grow-1 p-4">
+                <!-- Dynamic content will be loaded here-->
+                <section id="dashboard-content" class="content-section">
+                    <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
+                    <p>Welcome to Football Manager. Please select an option from the menu.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Active Tournaments</h5>
+                                    <p class="card-text" id="active-tournaments-count">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Teams</h5>
+                                    <p class="card-text" id="total-teams-count">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tournaments-content" class="content-section d-none">
+                    <h2><i class="fas fa-trophy me-2"></i>Football Manager</h2>
+                    <button class="btn btn-success mb-3 admin-only" data-bs-toggle="modal" data-bs-target="#tournament-modal" id="add-tournament-btn"><i class="fas fa-plus me-2"></i>Create Tournament</button>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th>Dates</th>
+                                    <th class="admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tournaments-table-body">
+                                <!-- Tournaments rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="teams-content" class="content-section d-none">
+                    <h2><i class="fas fa-users me-2"></i>Team Manager</h2>
+                    <button class="btn btn-success mb-3 admin-only" data-bs-toggle="modal" data-bs-target="#team-modal" id="add-team-btn"><i class="fas fa-plus me-2"></i>Create Team</button>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Tournament</th>
+                                    <th class="admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teams-table-body">
+                                <!-- Teams rows will be inserted here-->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="players-content" class="content-section d-none">
+                    <h2><i class="fas fa-user-friends me-2"></i>Players Manager</h2>
+                    <button class="btn btn-success mb-3 admin-only" data-bs-toggle="modal" data-bs-target="#player-modal" id="add-player-btn"><i class="fas fa-plus me-2"></i>Create Player</button>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Team</th>
+                                    <th>Position</th>
+                                    <th>Number</th>
+                                    <th class="admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="players-table-body">
+                                <!-- Players rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="matches-content" class="content-section d-none">
+                    <h2><i class="fas fa-calendar-alt me-2"></i>Match Manager</h2>
+                    <button class="btn btn-success mb-3 admin-only" data-bs-toggle="modal" data-bs-target="#match-modal" id="add-match-btn"><i class="fas fa-plus me-2"></i>Create Match</button>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tournament</th>
+                                    <th>Home</th>
+                                    <th>Away</th>
+                                    <th>Result</th>
+                                    <th>Date and Time</th>
+                                    <th class="admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matches-table-body">
+                                <!-- Matches rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="leaderboards-content" class="content-section d-none">
+                    <h2><i class="fas fa-list-ol me-2"></i>Standings</h2>
+                    <div class="mb-3">
+                        <label for="leaderboard-tournament-select" class="form-label">Select Tournament:</label>
+                        <select id="leaderboard-tournament-select" class="form-select"></select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Team</th>
+                                    <th>MP</th>
+                                    <th>W</th>
+                                    <th>D</th>
+                                    <th>L</th>
+                                    <th>GF</th>
+                                    <th>GC</th>
+                                    <th>GD</th>
+                                    <th>Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-table-body">
+                                <!-- Standings rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="stats-content" class="content-section d-none">
+                    <h2><i class="fas fa-chart-bar me-2"></i>Statistics</h2>
+                     <div class="mb-3">
+                        <label for="stats-tournament-select" class="form-label">Select Tournament:</label>
+                        <select id="stats-tournament-select" class="form-select"></select>
+                    </div>
+                    <div id="tournament-stats-display">
+                        <!-- Statistics of the tournament -->
+                    </div>
+                    <hr>
+                    <h4>Top Scorers</h4>
+                    <div id="top-scorers-display" class="table-responsive">
+                       <table class="table table-sm">
+                           <thead><tr><th>Player</th><th>Team</th><th>Goals</th></tr></thead>
+                           <tbody id="top-scorers-body"></tbody>
+                       </table>
+                    </div>
+                     <hr>
+                    <h4>Top Assists</h4>
+                    <div id="top-assists-display" class="table-responsive">
+                       <table class="table table-sm">
+                           <thead><tr><th>Player</th><th>Team</th><th>Assists</th></tr></thead>
+                           <tbody id="top-assists-body"></tbody>
+                       </table>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Tournament Modal -->
+    <div class="modal fade" id="tournament-modal" tabindex="-1" aria-labelledby="tournamentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tournamentModalLabel">Create/Edit Tournament</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="tournament-form">
+                        <input type="hidden" id="tournament-id">
+                        <div class="mb-3">
+                            <label for="tournament-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="tournament-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournament-category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="tournament-category" placeholder="Eg: Senior, Youth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournament-type" class="form-label">Type</label>
+                            <select class="form-select" id="tournament-type" required>
+                                <option value="League">League</option>
+                                <option value="Cup">Cup</option>
+                                <option value="Friendly">Friendly</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournament-start-date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="tournament-start-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournament-end-date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="tournament-end-date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Modal -->
+    <div class="modal fade" id="team-modal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="teamModalLabel">Create/Edit Team</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="team-form">
+                        <input type="hidden" id="team-id">
+                        <div class="mb-3">
+                            <label for="team-name" class="form-label">Team Name</label>
+                            <input type="text" class="form-control" id="team-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="team-tournament" class="form-label">Associate to Tournament</label>
+                            <select class="form-select" id="team-tournament" required>
+                                <!-- Tournament options will be loaded here-->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Modal -->
+    <div class="modal fade" id="player-modal" tabindex="-1" aria-labelledby="playerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="playerModalLabel">Create/Edit Player</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="player-form">
+                        <input type="hidden" id="player-id">
+                        <div class="mb-3">
+                            <label for="player-name" class="form-label">Player Name</label>
+                            <input type="text" class="form-control" id="player-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="player-team" class="form-label">Associate to a Team</label>
+                            <select class="form-select" id="player-team" required>
+                                <!-- Team options will be loaded here -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="player-position" class="form-label">Position</label>
+                            <select class="form-select" id="player-position" required>
+                                <option value="Goalkeeper">Goalkeeper</option>
+                                <option value="Defender">Defender</option>
+                                <option value="Midfielder">Midfielder</option>
+                                <option value="Forward">Forward</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="player-number" class="form-label">Shirt Number</label>
+                            <input type="number" class="form-control" id="player-number" min="1" max="99" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Modal -->
+    <div class="modal fade" id="match-modal" tabindex="-1" aria-labelledby="matchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Larger modal for match details -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="matchModalLabel">Create/Edit Match</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="match-form">
+                        <input type="hidden" id="match-id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="match-tournament" class="form-label">Tournament</label>
+                                <select class="form-select" id="match-tournament" required>
+                                    <!-- Tournament Options -->
+                                </select>
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label for="match-date" class="form-label">Date and Time</label>
+                                <input type="datetime-local" class="form-control" id="match-date" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="match-team-a" class="form-label">Home Team</label>
+                                <select class="form-select" id="match-team-a" required>
+                                    <!-- Team options for the selected tournament -->
+                                </select>
+                            </div>
+                             <div class="col-md-2 mb-3 text-center">
+                                <label class="form-label">Result</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control text-center" id="match-team-a-score" min="0" placeholder="Home Goals">
+                                    <span class="input-group-text">-</span>
+                                    <input type="number" class="form-control text-center" id="match-team-b-score" min="0" placeholder="Away Goals">
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="match-team-b" class="form-label">Away Team</label>
+                                <select class="form-select" id="match-team-b" required>
+                                     <!-- Team options for the selected tournament -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h5>Match Statistics (Optional)</h5>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Home Team: <span id="selected-team-a-name"></span></h6>
+                                <div id="team-a-stats-fields">
+                                    <!-- Fields for goals, assists, cards for team A -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Away Team: <span id="selected-team-b-name"></span></h6>
+                                <div id="team-b-stats-fields">
+                                    <!-- Fields for goals, assists, cards for team B -->
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-info mt-2" id="add-stat-field-team-a">Add Home Statistics</button>
+                        <button type="button" class="btn btn-sm btn-info mt-2" id="add-stat-field-team-b">Add Away Statistics</button>
+
+                        <button type="submit" class="btn btn-primary mt-3">Save Match</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle (Popper.js included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
